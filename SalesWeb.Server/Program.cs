@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SalesWeb.Server.Data;
+using SalesWeb.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<SeddingService>();
+builder.Services.AddScoped<SellerService>();
 
 var connectionString = builder.Configuration.GetConnectionString("ConnectionDB");
 builder.Services.AddDbContext<Context>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
