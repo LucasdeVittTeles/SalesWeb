@@ -11,10 +11,13 @@ namespace SalesWeb.Server.Controllers
     {
 
         private readonly SellerService _sellerService;
+        private readonly DepartmentService _departmentService;
 
-        public SellersController(SellerService sellerService)
+
+        public SellersController(SellerService sellerService, DepartmentService departmentService)
         {
             _sellerService = sellerService;
+            _departmentService = departmentService;
         }
 
         [HttpGet]
@@ -33,6 +36,30 @@ namespace SalesWeb.Server.Controllers
                 return NotFound();
             }
             return Ok(product);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PostSeller(Seller seller)
+        {
+            _sellerService.Insert(seller);
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+
+        public ActionResult DeleteSeller(int id)
+        {
+
+            var seller = _sellerService.GetSellerById(id);
+
+            if (seller == null)
+            {
+                return NotFound();
+            }
+
+            _sellerService.RemoveSeller(id);
+            return NoContent();
         }
     }
 }
