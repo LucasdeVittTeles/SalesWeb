@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SalesWeb.Server.Data;
 using SalesWeb.Server.Services;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,10 @@ builder.Services.AddScoped<DepartmentService>();
 
 var connectionString = builder.Configuration.GetConnectionString("ConnectionDB");
 builder.Services.AddDbContext<Context>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+var cultureInfo = new CultureInfo("en-US");
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 var app = builder.Build();
 

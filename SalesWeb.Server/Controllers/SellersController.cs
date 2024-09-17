@@ -61,5 +61,23 @@ namespace SalesWeb.Server.Controllers
             _sellerService.RemoveSeller(id);
             return NoContent();
         }
+
+        [HttpPut("{id}")]
+        public ActionResult PutSeller(int id, [FromBody] Seller seller)
+        {
+            if (id != seller.Id)
+            {
+                return BadRequest();
+            }
+
+            var existingSeller = _sellerService.GetSellerById(id);
+            if (existingSeller == null)
+            {
+                return NotFound();
+            }
+
+            _sellerService.UpdateSeller(seller);
+            return NoContent();
+        }
     }
 }
