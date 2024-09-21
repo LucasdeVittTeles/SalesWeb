@@ -21,16 +21,16 @@ namespace SalesWeb.Server.Controllers
         }
 
         [HttpGet]
-        public ActionResult<ICollection<Seller>> GetAllSellers()
+        public async Task<ActionResult<ICollection<Seller>>> GetAllSellers()
         {
-            var sellers = _sellerService.FindAll();
+            var sellers = await _sellerService.FindAllAsync();
             return Ok(sellers);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Seller> GetSeller(int id)
+        public async Task<ActionResult<Seller>> GetSeller(int id)
         {
-            var product = _sellerService.GetSellerById(id);
+            var product = await _sellerService.FindByIdAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -40,43 +40,43 @@ namespace SalesWeb.Server.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PostSeller(Seller seller)
+        public async Task<ActionResult> PostSeller(Seller seller)
         {
-            _sellerService.Insert(seller);
+            await _sellerService.InsertAsync(seller);
             return Ok();
         }
 
         [HttpDelete("{id}")]
 
-        public ActionResult DeleteSeller(int id)
+        public async Task<ActionResult> DeleteSeller(int id)
         {
 
-            var seller = _sellerService.GetSellerById(id);
+            var seller = await _sellerService.FindByIdAsync(id);
 
             if (seller == null)
             {
                 return NotFound();
             }
 
-            _sellerService.RemoveSeller(id);
+            await _sellerService.RemoveAsync(id);
             return NoContent();
         }
 
         [HttpPut("{id}")]
-        public ActionResult PutSeller(int id, [FromBody] Seller seller)
+        public async Task<ActionResult> PutSeller(int id, [FromBody] Seller seller)
         {
             if (id != seller.Id)
             {
                 return BadRequest();
             }
 
-            var existingSeller = _sellerService.GetSellerById(id);
+            var existingSeller = await _sellerService.FindByIdAsync(id);
             if (existingSeller == null)
             {
                 return NotFound();
             }
 
-            _sellerService.UpdateSeller(seller);
+            await _sellerService.UpdateAsync(seller);
             return NoContent();
         }
     }
