@@ -4,7 +4,7 @@ using SalesWeb.Server.Models;
 
 namespace SalesWeb.Server.Services
 {
-    public class DepartmentService
+    public class DepartmentService : IDepartmentService
     {
 
         private readonly Context _context;

@@ -2,13 +2,14 @@
 using Microsoft.IdentityModel.Tokens;
 using SalesWeb.Server.Data;
 using SalesWeb.Server.Models;
+using SalesWeb.Server.Services.Exceptions;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
 namespace SalesWeb.Server.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly Context _context;
 
@@ -18,7 +19,7 @@ namespace SalesWeb.Server.Services
         }
 
 
-        public async Task InsertUser(User user)
+        public async Task InsertAsync(User user)
         {
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
             _context.User.Add(user);
@@ -26,7 +27,7 @@ namespace SalesWeb.Server.Services
         }
 
 
-        public async Task<bool> validateLogin(User user)
+        public async Task<bool> validateLoginAsync(User user)
         {
             var existingUser = await _context.User.SingleOrDefaultAsync(u => u.Username == user.Username);
             if (existingUser == null || !BCrypt.Net.BCrypt.Verify(user.PasswordHash, existingUser.PasswordHash))

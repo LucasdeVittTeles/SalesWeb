@@ -5,7 +5,7 @@ using SalesWeb.Server.Services.Exceptions;
 
 namespace SalesWeb.Server.Services
 {
-    public class SellerService
+    public class SellerService : ISellerService
     {
         private readonly Context _context;
 
