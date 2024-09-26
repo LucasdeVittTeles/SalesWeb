@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using SalesWeb.Server.Models;
 using SalesWeb.Server.Services;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace SalesWeb.Server.Controllers
 {
@@ -23,20 +19,10 @@ namespace SalesWeb.Server.Controllers
 
 
         [HttpPost("Register")]
-        public ActionResult Register([FromBody] User user)
+        public async Task<ActionResult> Register([FromBody] User user)
         {
-            _UserService.InsertUser(user);
+            await _UserService.InsertAsync(user);
             return Ok();
-        }
-
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] User user)
-        {
-            var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Username == user.Username);
-            if (existingUser == null || !BCrypt.Net.BCrypt.Verify(user.PasswordHash, existingUser.PasswordHash))
-                return Unauthorized();
-            var token = GenerateJwtToken(existingUser.Username);
-            return Ok(new { Token = token });
         }
     }
 }

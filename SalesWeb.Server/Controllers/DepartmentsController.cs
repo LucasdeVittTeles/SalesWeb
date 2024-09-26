@@ -24,6 +24,9 @@ namespace SalesWeb.Server.Controllers
             return await _context.Department.ToListAsync();
         }
 
+
+
+
         [HttpGet("{DepartmentId}")]
 
         public async Task<ActionResult<Department>> GetDepartmentForId(int departmentId)

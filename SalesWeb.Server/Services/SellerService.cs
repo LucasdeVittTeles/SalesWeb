@@ -2,28 +2,35 @@
 using SalesWeb.Server.Models;
 using Microsoft.EntityFrameworkCore;
 using SalesWeb.Server.Services.Exceptions;
+using AutoMapper;
+using SalesWeb.Server.DTOs;
 
 namespace SalesWeb.Server.Services
 {
     public class SellerService : ISellerService
     {
-        private readonly Context _context;
 
-        public SellerService(Context context)
+        private readonly Context _context;
+        private readonly IMapper _mapper;
+
+        public SellerService(Context context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
 
-        public async Task<List<Seller>> FindAllAsync()
+        public async Task<List<SellerDto>> FindAllAsync()
         {
-            return await _context.Seller.ToListAsync();
+            var sellers = await _context.Seller.ToListAsync();
+            return _mapper.Map<List<SellerDto>>(sellers);
         }
 
 
-        public async Task<Seller> FindByIdAsync(int id)
+        public async Task<SellerDto> FindByIdAsync(int id)
         {
-            return await _context.Seller.Include(obj => obj.Department).FirstOrDefaultAsync(obj => obj.Id == id);
+            var seller = await _context.Seller.Include(obj => obj.Department).FirstOrDefaultAsync(obj => obj.Id == id);
+            return _mapper.Map<SellerDto>(seller);
         }
 
 

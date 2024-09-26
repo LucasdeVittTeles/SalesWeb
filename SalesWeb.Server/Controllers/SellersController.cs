@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SalesWeb.Server.Models;
 using SalesWeb.Server.Services;
+using SalesWeb.Server.DTOs;
 
 namespace SalesWeb.Server.Controllers
 {
@@ -10,18 +11,16 @@ namespace SalesWeb.Server.Controllers
     public class SellersController : ControllerBase
     {
 
-        private readonly SellerService _sellerService;
-        private readonly DepartmentService _departmentService;
+        private readonly ISellerService _sellerService;
 
 
-        public SellersController(SellerService sellerService, DepartmentService departmentService)
+        public SellersController(ISellerService sellerService)
         {
             _sellerService = sellerService;
-            _departmentService = departmentService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<ICollection<Seller>>> GetAllSellers()
+        public async Task<ActionResult<ICollection<SellerDto>>> GetAllSellers()
         {
             var sellers = await _sellerService.FindAllAsync();
             return Ok(sellers);
