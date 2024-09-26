@@ -1,5 +1,4 @@
 ﻿using SalesWeb.Server.DTOs;
-using SalesWeb.Server.Models;
 
 namespace SalesWeb.Server.Services
 {
@@ -7,8 +6,8 @@ namespace SalesWeb.Server.Services
     {
         Task<List<SellerDto>> FindAllAsync();
         Task<SellerDto> FindByIdAsync(int id);
-        Task InsertAsync(Seller seller);
-        Task UpdateAsync(Seller seller);
+        Task InsertAsync(SellerDto sellerDto);
+        Task UpdateAsync(SellerDto sellerDto);
         Task RemoveAsync(int id);
     }
 }

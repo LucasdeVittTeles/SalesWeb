@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SalesWeb.Server.Models;
 using SalesWeb.Server.Services;
 using SalesWeb.Server.DTOs;
 
@@ -12,7 +11,6 @@ namespace SalesWeb.Server.Controllers
     {
 
         private readonly ISellerService _sellerService;
-
 
         public SellersController(ISellerService sellerService)
         {
@@ -27,7 +25,7 @@ namespace SalesWeb.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Seller>> GetSeller(int id)
+        public async Task<ActionResult<SellerDto>> GetSeller(int id)
         {
             var product = await _sellerService.FindByIdAsync(id);
             if (product == null)
@@ -39,9 +37,9 @@ namespace SalesWeb.Server.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> PostSeller(Seller seller)
+        public async Task<ActionResult> PostSeller(SellerDto sellerDto)
         {
-            await _sellerService.InsertAsync(seller);
+            await _sellerService.InsertAsync(sellerDto);
             return Ok();
         }
 
@@ -62,9 +60,10 @@ namespace SalesWeb.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> PutSeller(int id, [FromBody] Seller seller)
+        public async Task<ActionResult> PutSeller(int id, [FromBody] SellerDto sellerDto)
         {
-            if (id != seller.Id)
+
+            if (id != sellerDto.Id)
             {
                 return BadRequest();
             }
@@ -75,7 +74,7 @@ namespace SalesWeb.Server.Controllers
                 return NotFound();
             }
 
-            await _sellerService.UpdateAsync(seller);
+            await _sellerService.UpdateAsync(sellerDto);
             return NoContent();
         }
     }

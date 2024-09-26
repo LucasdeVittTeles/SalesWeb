@@ -34,8 +34,9 @@ namespace SalesWeb.Server.Services
         }
 
 
-        public async Task InsertAsync(Seller seller)
+        public async Task InsertAsync(SellerDto sellerDto)
         {
+            var seller = _mapper.Map<Seller>(sellerDto);
             await _context.AddAsync(seller);
             await _context.SaveChangesAsync();
         }
@@ -55,9 +56,10 @@ namespace SalesWeb.Server.Services
             }
         }
 
-        public async Task UpdateAsync(Seller seller)
+        public async Task UpdateAsync(SellerDto sellerDto)
         {
 
+            var seller = _mapper.Map<Seller>(sellerDto);
             bool hasAny = await _context.Seller.AnyAsync(s => s.Id == seller.Id);
             if (!hasAny)
             {
