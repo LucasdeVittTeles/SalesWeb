@@ -1,10 +1,12 @@
-﻿using SalesWeb.Server.Models;
+﻿using SalesWeb.Server.DTOs;
 
 namespace SalesWeb.Server.Services.Exceptions
 {
     public interface IUserService
     {
-        Task InsertAsync(User user);
-        Task<bool> validateLoginAsync(User user);
+        Task InsertAsync(UserDto userDto);
+        Task<bool> AuthenticateAsync(UserDto userDtod);
+        Task<bool> UserExists(string username);
+        public string GenerateToken(string username);
     }
 }

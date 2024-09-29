@@ -1,9 +1,9 @@
-﻿using SalesWeb.Server.Models;
+﻿using SalesWeb.Server.DTOs;
 
 namespace SalesWeb.Server.Services
 {
     public interface IDepartmentService
     {
-        Task<List<Department>> FindAllAsync();
+        Task<List<DepartmentDto>> FindAllAsync();
     }
 }

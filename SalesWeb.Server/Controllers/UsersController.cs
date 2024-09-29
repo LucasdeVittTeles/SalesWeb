@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SalesWeb.Server.Models;
+using SalesWeb.Server.DTOs;
 using SalesWeb.Server.Services;
 
 namespace SalesWeb.Server.Controllers
@@ -10,18 +10,38 @@ namespace SalesWeb.Server.Controllers
     public class UsersController : ControllerBase
     {
 
-        private readonly UserService _UserService;
+        private readonly UserService _userService;
 
         public UsersController(UserService userService)
         {
-            _UserService = userService;
+            _userService = userService;
         }
 
 
         [HttpPost("Register")]
-        public async Task<ActionResult> Register([FromBody] User user)
+        public async Task<ActionResult> Register([FromBody] UserDto userDto)
         {
-            await _UserService.InsertAsync(user);
+
+            if (userDto == null)
+            {
+                return BadRequest("Dados inválidos");
+            }
+
+            var userExists = await _userService.UserExists(userDto.Username);
+
+            if (userExists)
+            {
+                return BadRequest("Este username já possui um cadastro.");
+            }
+
+            await _userService.InsertAsync(userDto);
+            return Ok();
+        }
+
+
+        [HttpPost("login")]
+        public Task<ActionResult> Login([FromBody] UserDto userDto)
+        {
             return Ok();
         }
     }
