@@ -4,7 +4,6 @@ using Microsoft.IdentityModel.Tokens;
 using SalesWeb.Server.Data;
 using SalesWeb.Server.DTOs;
 using SalesWeb.Server.Models;
-using SalesWeb.Server.Services.Exceptions;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

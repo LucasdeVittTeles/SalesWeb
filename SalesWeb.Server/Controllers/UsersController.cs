@@ -10,9 +10,9 @@ namespace SalesWeb.Server.Controllers
     public class UsersController : ControllerBase
     {
 
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
-        public UsersController(UserService userService)
+        public UsersController(IUserService userService)
         {
             _userService = userService;
         }
@@ -40,9 +40,26 @@ namespace SalesWeb.Server.Controllers
 
 
         [HttpPost("login")]
-        public Task<ActionResult> Login([FromBody] UserDto userDto)
+        public async Task<ActionResult> Login([FromBody] UserDto userDto)
         {
-            return Ok();
+
+            var userExists = await _userService.UserExists(userDto.Username);
+
+            if (!userExists)
+            {
+                return Unauthorized("Usuário não existe.");
+            }
+
+            var result = await _userService.AuthenticateAsync(userDto);
+
+            if (!result)
+            {
+                return Unauthorized("Usuário ou senha inválido.");
+            }
+
+            var token = _userService.GenerateToken(userDto.Username);
+
+            return Ok(new { Token = token });
         }
     }
 }

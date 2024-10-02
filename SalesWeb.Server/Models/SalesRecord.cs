@@ -22,6 +22,5 @@ namespace SalesWeb.Server.Models
             Status = status;
             Seller = seller;
         }
-
     }
 }

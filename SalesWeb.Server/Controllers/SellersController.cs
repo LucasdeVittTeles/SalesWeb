@@ -2,11 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using SalesWeb.Server.Services;
 using SalesWeb.Server.DTOs;
-using Microsoft.AspNetCore.Authorization;
 
 namespace SalesWeb.Server.Controllers
 {
-    [Authorize]
+
     [Route("api/[controller]")]
     [ApiController]
     public class SellersController : ControllerBase
@@ -38,7 +37,6 @@ namespace SalesWeb.Server.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> PostSeller(SellerDto sellerDto)
         {
             await _sellerService.InsertAsync(sellerDto);

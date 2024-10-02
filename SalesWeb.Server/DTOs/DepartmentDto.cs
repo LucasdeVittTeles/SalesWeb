@@ -6,6 +6,6 @@ namespace SalesWeb.Server.DTOs
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<Seller> Sellers { get; set; }
+       // public ICollection<Seller> Sellers { get; set; }
     }
 }

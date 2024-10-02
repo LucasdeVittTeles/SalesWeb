@@ -1,6 +1,6 @@
 ﻿using SalesWeb.Server.DTOs;
 
-namespace SalesWeb.Server.Services.Exceptions
+namespace SalesWeb.Server.Services
 {
     public interface IUserService
     {

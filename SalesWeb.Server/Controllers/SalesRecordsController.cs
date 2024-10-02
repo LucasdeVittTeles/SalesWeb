@@ -9,14 +9,14 @@ namespace SalesWeb.Server.Controllers
     public class SalesRecordsController : ControllerBase
     {
 
-        private readonly SalesRecordService _salesRecordService;
+        private readonly ISalesRecordService _salesRecordService;
 
-        public SalesRecordsController(SalesRecordService salesRecordService)
+        public SalesRecordsController(ISalesRecordService salesRecordService)
         {
             _salesRecordService = salesRecordService;
         }
 
-        /*
+        
         [HttpGet]
         public async Task<ActionResult> SimpleSearch(DateTime? minDate, DateTime? maxDate)
         {
@@ -28,9 +28,8 @@ namespace SalesWeb.Server.Controllers
             if (!maxDate.HasValue)
             {
                 maxDate = DateTime.Now;
-
-
             }
+
             var result = await _salesRecordService.FindByDateAsync(minDate, maxDate);
             return Ok(result);
         }
@@ -50,6 +49,5 @@ namespace SalesWeb.Server.Controllers
             var result = await _salesRecordService.FindByDateGroupingAsync(minDate, maxDate);
             return Ok(result);
         }
-        */
     }
 }
