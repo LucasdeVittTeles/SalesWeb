@@ -1,9 +1,14 @@
-﻿using SalesWeb.Server.Models.Enums;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using SalesWeb.Server.Models.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace SalesWeb.Server.Models
 {
     public class SalesRecord
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public double Amount { get; set; }

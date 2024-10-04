@@ -1,4 +1,6 @@
-﻿namespace SalesWeb.Server.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SalesWeb.Server.Models
 {
     public class Department
     {
