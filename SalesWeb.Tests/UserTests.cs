@@ -1,4 +1,5 @@
 ﻿using Moq;
+using SalesWeb.Server.DTOs;
 using SalesWeb.Server.Models;
 using SalesWeb.Server.Services;
 
@@ -8,26 +9,29 @@ namespace SalesWeb.Tests
     {
 
         private readonly Mock<IUserService> _userServiceMock;
-        private readonly AuthService _authService;
+        private readonly UserService _userService;
 
-        public UserTests()
+        public UserTests(UserService userService)
         {
             _userServiceMock = new Mock<IUserService>();
-            _authService = new AuthService(_userServiceMock.Object);
+            _userService = userService;
         }
 
         [Fact]
         public async Task Login_WithValidCredentials_ReturnsToken()
         {
             // Arrange
-            var username = "test";
-            var password = "test123";
-            var user = new User { Username = username, PasswordHash = HashPassword(password) };
+            var userDto = new UserDto()
+            {
+                Id = 0,
+                Username = "test",
+                PasswordHash = "test123"
+            }; 
 
-            _userServiceMock.Setup(x => x.UserExists(username).ReturnsAsync(user);
+            _userServiceMock.Setup(x => x.UserExists(userDto.Username)).Returns();
 
             // Act
-            var token = await _authService.Login(username, password);
+            var token = await _userService.AuthenticateAsync();
 
             // Assert
             Assert.NotNull(token);

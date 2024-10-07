@@ -21,14 +21,14 @@ namespace SalesWeb.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<SellerDto>>> GetAllSellers()
         {
-            var sellers = await _sellerService.FindAllAsync();
+            var sellers = await _sellerService.GetAllAsync();
             return Ok(sellers);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<SellerDto>> GetSeller(int id)
         {
-            var product = await _sellerService.FindByIdAsync(id);
+            var product = await _sellerService.GetByIdAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -39,7 +39,7 @@ namespace SalesWeb.Server.Controllers
         [HttpPost]
         public async Task<ActionResult> PostSeller(SellerDto sellerDto)
         {
-            await _sellerService.InsertAsync(sellerDto);
+            await _sellerService.AddAsync(sellerDto);
             return Ok();
         }
 
@@ -48,15 +48,15 @@ namespace SalesWeb.Server.Controllers
         public async Task<ActionResult> DeleteSeller(int id)
         {
 
-            var seller = await _sellerService.FindByIdAsync(id);
+            var seller = await _sellerService.GetByIdAsync(id);
 
             if (seller == null)
             {
                 return NotFound();
             }
 
-            await _sellerService.RemoveAsync(id);
-            return NoContent();
+            await _sellerService.DeleteAsync(id);
+            return Ok();
         }
 
         [HttpPut("{id}")]
@@ -67,15 +67,8 @@ namespace SalesWeb.Server.Controllers
             {
                 return BadRequest();
             }
-
-            var existingSeller = await _sellerService.FindByIdAsync(id);
-            if (existingSeller == null)
-            {
-                return NotFound();
-            }
-
             await _sellerService.UpdateAsync(sellerDto);
-            return NoContent();
+            return Ok();
         }
     }
 }

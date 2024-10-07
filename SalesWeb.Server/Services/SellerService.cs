@@ -1,54 +1,50 @@
-﻿using SalesWeb.Server.Data;
-using SalesWeb.Server.Models;
+﻿using SalesWeb.Server.Models;
 using Microsoft.EntityFrameworkCore;
 using SalesWeb.Server.Services.Exceptions;
 using AutoMapper;
 using SalesWeb.Server.DTOs;
+using SalesWeb.Server.Repository;
 
 namespace SalesWeb.Server.Services
 {
     public class SellerService : ISellerService
     {
 
-        private readonly Context _context;
+        private readonly ISellerRepository _sellerRepository;
         private readonly IMapper _mapper;
 
-        public SellerService(Context context, IMapper mapper)
+        public SellerService(ISellerRepository sellerRepository, IMapper mapper)
         {
-            _context = context;
+            _sellerRepository = sellerRepository;
             _mapper = mapper;
         }
 
 
-        public async Task<List<SellerDto>> FindAllAsync()
+        public async Task<IEnumerable<SellerDto>> GetAllAsync()
         {
-            var sellers = await _context.Seller.ToListAsync();
+            var sellers = await _sellerRepository.GetAllAsync();
             return _mapper.Map<List<SellerDto>>(sellers);
         }
 
 
-        public async Task<SellerDto> FindByIdAsync(int id)
+        public async Task<SellerDto> GetByIdAsync(int id)
         {
-            var seller = await _context.Seller.Include(obj => obj.Department).FirstOrDefaultAsync(obj => obj.Id == id);
+            var seller = await _sellerRepository.GetByIdAsync(id);
             return _mapper.Map<SellerDto>(seller);
         }
 
 
-        public async Task InsertAsync(SellerDto sellerDto)
+        public async Task AddAsync(SellerDto sellerDto)
         {
             var seller = _mapper.Map<Seller>(sellerDto);
-            await _context.AddAsync(seller);
-            await _context.SaveChangesAsync();
+            await _sellerRepository.AddAsync(seller);
         }
 
-
-        public async Task RemoveAsync(int id)
+        public async Task DeleteAsync(int id)
         {
             try
             {
-                var seller = await _context.Seller.FindAsync(id);
-                _context.Seller.Remove(seller);
-                await _context.SaveChangesAsync();
+                await _sellerRepository.DeleteAsync(id);
             }
             catch (DbUpdateException e)
             {
@@ -60,15 +56,9 @@ namespace SalesWeb.Server.Services
         {
 
             var seller = _mapper.Map<Seller>(sellerDto);
-            bool hasAny = await _context.Seller.AnyAsync(s => s.Id == seller.Id);
-            if (!hasAny)
-            {
-                throw new NotFoundException("Id not found");
-            }
             try
             {
-                _context.Update(seller);
-                await _context.SaveChangesAsync();
+                await _sellerRepository.UpdateAsync(seller);
             }
             catch (DbUpdateConcurrencyException e)
             {

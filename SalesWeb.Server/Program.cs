@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SalesWeb.Server.Data;
 using SalesWeb.Server.DTOs.AutoMappers;
+using SalesWeb.Server.Repository;
 using SalesWeb.Server.Services;
-using SalesWeb.Server.Services.Exceptions;
 using System.Globalization;
 using System.Text;
 
@@ -18,6 +18,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<SeedingService>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
+builder.Services.AddScoped<ISellerRepository, SellerRepository>();
+
 builder.Services.AddScoped<ISellerService, SellerService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<ISalesRecordService, SalesRecordService>();

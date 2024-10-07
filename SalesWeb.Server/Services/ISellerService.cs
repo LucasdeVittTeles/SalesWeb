@@ -1,13 +1,15 @@
 ﻿using SalesWeb.Server.DTOs;
+using SalesWeb.Server.Models;
+using System.Threading.Tasks;
 
 namespace SalesWeb.Server.Services
 {
     public interface ISellerService
     {
-        Task<List<SellerDto>> FindAllAsync();
-        Task<SellerDto> FindByIdAsync(int id);
-        Task InsertAsync(SellerDto sellerDto);
+        Task<IEnumerable<SellerDto>> GetAllAsync();
+        Task<SellerDto> GetByIdAsync(int id);
+        Task AddAsync(SellerDto sellerDto);
         Task UpdateAsync(SellerDto sellerDto);
-        Task RemoveAsync(int id);
+        Task DeleteAsync(int id);
     }
 }

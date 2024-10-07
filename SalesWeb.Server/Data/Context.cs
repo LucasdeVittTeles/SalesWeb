@@ -18,16 +18,9 @@ namespace SalesWeb.Server.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Seller>()
-                .Property(p => p.Id)
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<User>()
-                .Property(p => p.Id)
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<SalesRecord>()
-                .Property(p => p.Id)
-                .ValueGeneratedOnAdd();
+                .HasOne(s => s.Department)
+                .WithMany(d => d.Sellers)
+                .HasForeignKey(s => s.DepartmentId);
         }
     }
 }

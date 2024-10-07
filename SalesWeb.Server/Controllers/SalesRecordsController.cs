@@ -16,7 +16,7 @@ namespace SalesWeb.Server.Controllers
             _salesRecordService = salesRecordService;
         }
 
-        
+        /*
         [HttpGet]
         public async Task<ActionResult> SimpleSearch(DateTime? minDate, DateTime? maxDate)
         {
@@ -49,5 +49,7 @@ namespace SalesWeb.Server.Controllers
             var result = await _salesRecordService.FindByDateGroupingAsync(minDate, maxDate);
             return Ok(result);
         }
+        */
     }
 }
+
