@@ -1,11 +1,34 @@
-﻿namespace SalesWeb.Server.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SalesWeb.Server.Models
 {
     public class Department
     {
+        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public IEnumerable<Seller> Sellers { get; set; } = new List<Seller>();
+        public ICollection<Seller> Sellers { get; set; } = new List<Seller>();
 
+        public Department()
+        {
+
+        }
+
+        public Department(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+
+        public void AddSeller(Seller seller)
+        {
+            Sellers.Add(seller);
+        }
+
+        public double TotalSales(DateTime initial, DateTime final)
+        {
+            return Sellers.Sum(Seller => Seller.TotalSales(initial, final));
+        }
     }
 }

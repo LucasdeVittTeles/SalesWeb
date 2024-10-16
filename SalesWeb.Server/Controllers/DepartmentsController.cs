@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SalesWeb.Server.Data;
-using SalesWeb.Server.Models;
+using SalesWeb.Server.DTOs;
+using SalesWeb.Server.Services;
 
 namespace SalesWeb.Server.Controllers
 {
@@ -11,58 +10,18 @@ namespace SalesWeb.Server.Controllers
     public class DepartmentsController : ControllerBase
     {
 
-        private readonly Context _context;
+        private readonly IDepartmentService _departmentService;
 
-        public DepartmentsController(Context context)
+        public DepartmentsController(IDepartmentService departmentService)
         {
-            _context = context;
+            _departmentService = departmentService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Department>>> GetDepartments()
+        public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetAllDepartments()
         {
-            return await _context.Department.ToListAsync();
+            var departments = await _departmentService.GetAllAsync();
+            return Ok(departments);
         }
-
-        [HttpGet("{DepartmentId}")]
-
-        public async Task<ActionResult<Department>> GetDepartmentForId(int departmentId)
-        {
-            Department department = await _context.Department.FindAsync(departmentId);
-
-            if (department == null)
-            {
-                return NotFound();
-            }
-
-            return department;
-        }
-
-        [HttpPost]
-
-        public async Task<ActionResult<Department>> CreateDepartment(Department department)
-        {
-            await _context.Department.AddAsync(department);
-            await _context.SaveChangesAsync();
-
-            return Ok();
-
-       
-        }
-
-         /*
-
-        [HttpDelete]
-       
-       
-        public async Task<ActionResult> DeleteDepartment(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-        }
-     */
-        
     }
 }
