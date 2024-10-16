@@ -1,4 +1,5 @@
 ﻿using SalesWeb.Server.DTOs;
+using SalesWeb.Server.Models;
 
 namespace SalesWeb.Server.Services
 {
@@ -6,7 +7,7 @@ namespace SalesWeb.Server.Services
     {
         Task InsertAsync(UserDto userDto);
         Task<bool> AuthenticateAsync(UserDto userDtod);
-        Task<bool> UserExists(string username);
+        Task<User> UserExists(string username);
         public string GenerateToken(string username);
     }
 }

@@ -1,25 +1,24 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using SalesWeb.Server.Data;
 using SalesWeb.Server.DTOs;
+using SalesWeb.Server.Repository;
 
 namespace SalesWeb.Server.Services
 {
     public class DepartmentService : IDepartmentService
     {
 
-        private readonly Context _context;
+        private readonly IDepartmentRepository _departmentRepository;
         private readonly IMapper _mapper;
 
-        public DepartmentService(Context context, IMapper mapper)
+        public DepartmentService(IDepartmentRepository departmentRepository, IMapper mapper)
         {
-            _context = context;
+            _departmentRepository = departmentRepository;
             _mapper = mapper;
         }
 
-        public async Task<List<DepartmentDto>> FindAllAsync()
+        public async Task<List<DepartmentDto>> GetAllAsync()
         {
-            var departments = await _context.Department.OrderBy(d => d.Name).ToListAsync();
+            var departments = await _departmentRepository.GetAllAsync();
             return _mapper.Map<List<DepartmentDto>>(departments);
         }
     }

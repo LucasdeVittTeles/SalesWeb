@@ -6,10 +6,10 @@ namespace SalesWeb.Server.Services
 {
     public interface ISellerService
     {
-        Task<IEnumerable<SellerDto>> GetAllAsync();
+        Task<List<SellerDto>> GetAllAsync();
         Task<SellerDto> GetByIdAsync(int id);
         Task AddAsync(SellerDto sellerDto);
-        Task UpdateAsync(SellerDto sellerDto);
+        Task UpdateAsync(int id, SellerDto sellerDto);
         Task DeleteAsync(int id);
     }
 }

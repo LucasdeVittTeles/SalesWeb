@@ -20,7 +20,7 @@ namespace SalesWeb.Server.Services
         }
 
 
-        public async Task<IEnumerable<SellerDto>> GetAllAsync()
+        public async Task<List<SellerDto>> GetAllAsync()
         {
             var sellers = await _sellerRepository.GetAllAsync();
             return _mapper.Map<List<SellerDto>>(sellers);
@@ -52,10 +52,14 @@ namespace SalesWeb.Server.Services
             }
         }
 
-        public async Task UpdateAsync(SellerDto sellerDto)
+        public async Task UpdateAsync(int id, SellerDto sellerDto)
         {
-
-            var seller = _mapper.Map<Seller>(sellerDto);
+            var seller = await _sellerRepository.GetByIdAsync(id);
+            seller.Name = sellerDto.Name;
+            seller.Email = sellerDto.Email;
+            seller.BirthDate = sellerDto.BirthDate;
+            seller.BaseSalary = sellerDto.BaseSalary;
+            seller.DepartmentId = sellerDto.DepartmentId;
             try
             {
                 await _sellerRepository.UpdateAsync(seller);

@@ -20,7 +20,7 @@ namespace SalesWeb.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetAllDepartments()
         {
-            var departments = await _departmentService.FindAllAsync();
+            var departments = await _departmentService.GetAllAsync();
             return Ok(departments);
         }
     }

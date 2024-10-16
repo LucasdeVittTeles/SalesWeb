@@ -1,64 +1,25 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using SalesWeb.Server.Data;
-using SalesWeb.Server.DTOs;
-using SalesWeb.Server.Models;
+﻿using SalesWeb.Server.Models;
+using SalesWeb.Server.Repository;
 
 namespace SalesWeb.Server.Services
 {
     public class SalesRecordService : ISalesRecordService
     {
-        private readonly Context _context;
-        private readonly IMapper _mapper;
+        private readonly ISalesRecordRepository _salesRecordRepository;
 
-        public SalesRecordService(Context context, IMapper mapper)
+        public SalesRecordService(ISalesRecordRepository salesRecordRepository)
         {
-            _context = context;
-            _mapper = mapper;
+            _salesRecordRepository = salesRecordRepository;
         }
 
-        public async Task<List<SalesRecordDto>> FindByDateAsync(DateTime? minDate, DateTime? maxDate)
+        public async Task<List<SalesRecord>> FindByDateAsync(DateTime minDate, DateTime maxDate)
         {
-            var result = from obj in _context.SalesRecord select obj;
-
-            if (minDate != null)
-            {
-                result = result.Where(x => x.Date >= minDate.Value);
-            }
-            if (maxDate != null)
-            {
-                result = result.Where(x => x.Date <= maxDate.Value);
-            }
-
-            var salesRecords = await result
-                 .Include(x => x.Seller)
-                 .Include(x => x.Seller.Department)
-                 .OrderByDescending(x => x.Date)
-                 .ToListAsync();
-
-
-            return _mapper.Map<List<SalesRecordDto>>(salesRecords);
+            return await _salesRecordRepository.GetByDateAsync(minDate, maxDate);
         }
 
-        public async Task<List<IGrouping<Department, SalesRecord>>> FindByDateGroupingAsync(DateTime? minDate, DateTime? maxDate)
+        public async Task<List<IGrouping<Department, SalesRecord>>> FindByDateGroupingAsync(DateTime minDate, DateTime maxDate)
         {
-            var result = from obj in _context.SalesRecord select obj;
-
-            if (minDate.HasValue)
-            {
-                result = result.Where(x => x.Date >= minDate.Value);
-            }
-            if (maxDate.HasValue)
-            {
-                result = result.Where(x => x.Date <= maxDate.Value);
-            }
-
-            return await result
-                .Include(x => x.Seller)
-                .Include(x => x.Seller.Department)
-                .OrderByDescending(x => x.Date)
-                .GroupBy(x => x.Seller.Department)
-                .ToListAsync();
+            return await _salesRecordRepository.GetByDateGroupingAsync(minDate, maxDate);
         }
     }
 }

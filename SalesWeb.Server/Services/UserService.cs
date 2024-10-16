@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using SalesWeb.Server.Data;
 using SalesWeb.Server.DTOs;
 using SalesWeb.Server.Models;
+using SalesWeb.Server.Repository;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -12,13 +11,13 @@ namespace SalesWeb.Server.Services
 {
     public class UserService : IUserService
     {
-        private readonly Context _context;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
 
-        public UserService(Context context, IMapper mapper, IConfiguration configuration)
+        public UserService(IUserRepository userRepository, IMapper mapper, IConfiguration configuration)
         {
-            _context = context;
+            _userRepository = userRepository;
             _mapper = mapper;
             _configuration = configuration;
         }
@@ -27,15 +26,13 @@ namespace SalesWeb.Server.Services
         {
             var user = _mapper.Map<User>(userDto);
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
-            await _context.User.AddAsync(user);
-            await _context.SaveChangesAsync();
+            await _userRepository.AddAsync(user);
         }
-
 
         public async Task<bool> AuthenticateAsync(UserDto userDto)
         {
             var user = _mapper.Map<User>(userDto);
-            var storedUser = await _context.User.SingleOrDefaultAsync(u => u.Username.ToLower() == user.Username.ToLower());
+            var storedUser = await _userRepository.VerifyUsernameAsync(user.Username);
 
             if (storedUser == null || !BCrypt.Net.BCrypt.Verify(user.PasswordHash, storedUser.PasswordHash))
             {
@@ -44,14 +41,10 @@ namespace SalesWeb.Server.Services
             return true;
         }
 
-        public async Task<bool> UserExists(string username)
+        public async Task<User> UserExists(string username)
         {
-            var storedUser = await _context.User.SingleOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
-            if (storedUser == null)
-            {
-                return false;
-            }
-            return true;
+            var storedUser = await _userRepository.VerifyUsernameAsync(username);
+            return storedUser;
         }
 
         public string GenerateToken(string username)

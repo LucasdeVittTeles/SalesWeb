@@ -20,6 +20,9 @@ builder.Services.AddScoped<SeedingService>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 builder.Services.AddScoped<ISellerRepository, SellerRepository>();
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<ISalesRecordRepository, SalesRecordRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<ISellerService, SellerService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();

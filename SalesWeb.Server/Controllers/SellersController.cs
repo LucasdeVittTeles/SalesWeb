@@ -62,12 +62,7 @@ namespace SalesWeb.Server.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> PutSeller(int id, [FromBody] SellerDto sellerDto)
         {
-
-            if (id != sellerDto.Id)
-            {
-                return BadRequest();
-            }
-            await _sellerService.UpdateAsync(sellerDto);
+            await _sellerService.UpdateAsync(id, sellerDto);
             return Ok();
         }
     }

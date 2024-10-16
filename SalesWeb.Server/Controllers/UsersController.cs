@@ -29,7 +29,7 @@ namespace SalesWeb.Server.Controllers
 
             var userExists = await _userService.UserExists(userDto.Username);
 
-            if (userExists)
+            if (userExists != null)
             {
                 return BadRequest("Este username já possui um cadastro.");
             }
@@ -45,7 +45,7 @@ namespace SalesWeb.Server.Controllers
 
             var userExists = await _userService.UserExists(userDto.Username);
 
-            if (!userExists)
+            if (userExists == null)
             {
                 return Unauthorized("Usuário não existe.");
             }
@@ -59,7 +59,7 @@ namespace SalesWeb.Server.Controllers
 
             var token = _userService.GenerateToken(userDto.Username);
 
-            return Ok(new { Token = token });
+            return Ok(new { id = userExists.Id, username = userExists.Username, Token = token });
         }
     }
 }

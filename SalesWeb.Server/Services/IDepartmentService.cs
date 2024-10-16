@@ -4,6 +4,6 @@ namespace SalesWeb.Server.Services
 {
     public interface IDepartmentService
     {
-        Task<List<DepartmentDto>> FindAllAsync();
+        Task<List<DepartmentDto>> GetAllAsync();
     }
 }
